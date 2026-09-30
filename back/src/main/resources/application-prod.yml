@@ -1,0 +1,7 @@
+spring:
+  mongodb:
+    uri: ${MONGODB_URI}
+    database: ${MONGODB_DATABASE:kairos}
+
+server:
+  address: 0.0.0.0

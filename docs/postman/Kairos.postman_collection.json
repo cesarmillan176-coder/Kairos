@@ -1,0 +1,331 @@
+{
+  "info": {
+    "name": "Kairos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "API de Kairos en dev. Incluye acceso directo a Cloud Run y acceso mediante Firebase Hosting. Las URLs están precargadas."
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://kairos-back-923012871834.us-central1.run.app",
+      "type": "string"
+    },
+    {
+      "key": "search_query",
+      "value": "Under the Dome",
+      "type": "string"
+    },
+    {
+      "key": "show_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "frontend_api_url",
+      "value": "https://kairos-deploy.web.app/api",
+      "type": "string"
+    },
+    {
+      "key": "frontend_url",
+      "value": "https://kairos-deploy.web.app",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Backend directo (Cloud Run)",
+      "item": [
+        {
+          "name": "Buscar series",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/search?search_query={{search_query}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "search_query",
+                  "value": "{{search_query}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Resultados con campos esperados\", () => {",
+                  "  const rows = pm.response.json();",
+                  "  pm.expect(rows).to.be.an(\"array\");",
+                  "  rows.forEach(row => {",
+                  "    pm.expect(row).to.include.all.keys(\"id\", \"name\", \"channel\", \"summary\", \"genres\", \"comments\");",
+                  "    pm.expect(row.comments).to.be.an(\"array\");",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar serie",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/show?show_id={{show_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "show"
+              ],
+              "query": [
+                {
+                  "key": "show_id",
+                  "value": "{{show_id}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Serie solicitada y comentarios\", () => {",
+                  "  const show = pm.response.json();",
+                  "  pm.expect(show.id).to.eql(Number(pm.variables.get(\"show_id\")));",
+                  "  pm.expect(show.name).to.be.a(\"string\");",
+                  "  pm.expect(show.comments).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear comentario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"show_id\": {{show_id}},\n  \"comment\": \"Me gustó la historia\",\n  \"rating\": 4.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/comments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Comentario creado\", () => {",
+                  "  pm.expect(pm.response.json().status).to.eql(\"created\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "API desde frontend (Firebase)",
+      "item": [
+        {
+          "name": "Buscar series",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{frontend_api_url}}/search?search_query={{search_query}}",
+              "host": [
+                "{{frontend_api_url}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "search_query",
+                  "value": "{{search_query}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Resultados con campos esperados\", () => {",
+                  "  const rows = pm.response.json();",
+                  "  pm.expect(rows).to.be.an(\"array\");",
+                  "  rows.forEach(row => {",
+                  "    pm.expect(row).to.include.all.keys(\"id\", \"name\", \"channel\", \"summary\", \"genres\", \"comments\");",
+                  "    pm.expect(row.comments).to.be.an(\"array\");",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar serie",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{frontend_api_url}}/show?show_id={{show_id}}",
+              "host": [
+                "{{frontend_api_url}}"
+              ],
+              "path": [
+                "show"
+              ],
+              "query": [
+                {
+                  "key": "show_id",
+                  "value": "{{show_id}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Serie solicitada y comentarios\", () => {",
+                  "  const show = pm.response.json();",
+                  "  pm.expect(show.id).to.eql(Number(pm.variables.get(\"show_id\")));",
+                  "  pm.expect(show.name).to.be.a(\"string\");",
+                  "  pm.expect(show.comments).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear comentario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"show_id\": {{show_id}},\n  \"comment\": \"Me gustó la historia\",\n  \"rating\": 4.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{frontend_api_url}}/comments",
+              "host": [
+                "{{frontend_api_url}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Comentario creado\", () => {",
+                  "  pm.expect(pm.response.json().status).to.eql(\"created\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

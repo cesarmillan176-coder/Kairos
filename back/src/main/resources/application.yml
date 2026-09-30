@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: kairos
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/kairos?serverSelectionTimeoutMS=3000&connectTimeoutMS=3000&socketTimeoutMS=5000}
+  data:
+    mongodb:
+      auto-index-creation: true
+  jackson:
+    deserialization:
+      accept-float-as-int: false
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+tvmaze:
+  base-url: ${TVMAZE_BASE_URL:https://api.tvmaze.com}
+  connect-timeout: 3s
+  read-timeout: 5s

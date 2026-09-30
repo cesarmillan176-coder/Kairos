@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Compilados y builds
+dist/
+target/
+*.jar
+*.war
+.firebase/
+.vite/
+
+# Archivos de entorno y secretos
+.env
+.env.*
+!.env.example
+gha-creds-*.json
+*-service-account.json
+
+# IDEs y Editores
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# Sistema operativo y temporales
+.DS_Store
+._*
+*.log
+data/

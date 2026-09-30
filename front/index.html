@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#214c40" />
+    <meta name="description" content="Encuentra tu próxima serie, descubre sus detalles y comparte tu opinión en Kairos." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Kairos · Encuentra tu próxima serie</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Kairos, inicio"><span class="brand-mark">k.</span> kairos</a>
+      <a class="nav-link" href="#explorar">Explorar series <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="explorar">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> PARA TU PRÓXIMO RATO LIBRE</p>
+          <h1 id="page-title">Siempre hay una<br />buena historia <em>por descubrir.</em></h1>
+          <p class="hero-description">Busca una serie, conoce su historia y comparte lo que te pareció.</p>
+          <form id="search-form" role="search">
+            <label class="sr-only" for="search-input">Buscar una serie</label>
+            <div class="search-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+              <input id="search-input" name="search_query" type="search" placeholder="¿Qué serie tienes en mente?" maxlength="200" required autocomplete="off" />
+              <button class="button primary" id="search-button" type="submit">Buscar <span aria-hidden="true">↗</span></button>
+            </div>
+          </form>
+          <div class="suggestions" aria-label="Búsquedas sugeridas"><span>Prueba con</span><button type="button" data-query="Dark">Dark</button><button type="button" data-query="The Office">The Office</button><button type="button" data-query="Breaking Bad">Breaking Bad</button></div>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="play-tile"><span>▶</span></div><span class="art-caption">DALE PLAY A ALGO NUEVO</span><span class="art-spark">✳</span></div>
+      </section>
+
+      <section class="results-section" aria-labelledby="results-title">
+        <div class="section-heading"><div><p class="eyebrow">ELIGE TU SIGUIENTE HISTORIA</p><h2 id="results-title">Explora a tu manera</h2></div><span id="result-count" class="result-count" role="status"></span></div>
+        <div id="search-feedback" class="empty-state" role="status"><span class="empty-symbol" aria-hidden="true">↗</span><h3>Todo empieza con un nombre</h3><p>Busca una serie o elige una de las sugerencias de arriba.</p></div>
+        <div id="results" class="show-grid" aria-busy="false"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><span class="footer-brand">kairos <span>Una historia a la vez.</span></span><span>Información de <a href="https://www.tvmaze.com/" target="_blank" rel="noreferrer">TVmaze ↗</a></span></footer>
+
+    <dialog id="show-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-top"><span class="eyebrow">UN POCO MÁS DE ESTA HISTORIA</span><button id="close-dialog" class="icon-button" type="button" aria-label="Cerrar detalle">✕</button></div>
+      <h2 id="dialog-title">Detalle de la serie</h2>
+      <p id="detail-feedback" class="detail-feedback" role="status"></p>
+      <div id="show-detail" hidden>
+        <div class="detail-overview"><img id="show-poster" alt="" hidden /><div><p id="show-meta" class="show-meta"></p><div id="show-genres" class="tags"></div><p id="show-summary" class="detail-summary"></p><a id="show-source" class="source-link" target="_blank" rel="noreferrer" hidden>Ver en TVmaze ↗</a></div></div>
+        <section class="comments-section" aria-labelledby="comments-title"><div class="comments-heading"><h3 id="comments-title">Lo que opinamos</h3><span id="comment-count" class="result-count"></span></div><div id="comments-list"></div></section>
+        <form id="comment-form" class="comment-form">
+          <h3>¿Ya la viste?</h3><p>Tu opinión puede ayudar a alguien a elegir.</p>
+          <div class="field"><label for="comment-rating">Tu calificación <span>(0 a 5)</span></label><select id="comment-rating" name="rating" required><option value="">Elige una calificación</option><option value="5">5 — Me encantó</option><option value="4">4 — Muy buena</option><option value="3">3 — Está bien</option><option value="2">2 — Podría ser mejor</option><option value="1">1 — No me convenció</option><option value="0">0 — No me gustó</option></select></div>
+          <div class="field"><label for="comment-text">Tu comentario</label><textarea id="comment-text" name="comment" placeholder="¿Qué te pareció la historia?" rows="3" maxlength="2000" required></textarea><span class="field-hint">Hasta 2000 caracteres.</span></div>
+          <div class="form-bottom"><p id="comment-feedback" role="status"></p><button id="comment-submit" class="button primary" type="submit">Publicar comentario <span aria-hidden="true">↗</span></button></div>
+        </form>
+      </div>
+    </dialog>
+
+    <template id="show-card-template"><article class="show-card"><div class="card-top"><span class="card-channel"></span><span class="card-number" aria-hidden="true"></span></div><h3></h3><div class="tags"></div><p class="card-summary"></p><div class="card-bottom"><span class="card-comments"></span><button type="button" class="detail-button">Ver serie <span aria-hidden="true">↗</span></button></div></article></template>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
